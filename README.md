@@ -1,6 +1,6 @@
-# AtendimentoApp
+# AtendimentoApp - Sistema de Atendimento - FrontEnd
 
-Sistema de gerenciamento de atendimentos desenvolvido em Angular 20.1.0.
+Sistema de gerenciamento de atendimentos de Clientes
 
 ## Tecnologias
 
@@ -66,6 +66,9 @@ Os arquivos de build serão armazenados no diretório `dist/`.
 ## Funcionalidades
 
 ### Módulos Implementados
+
+Clientes e CAs (Centrais de Atendimntos): Dados importados de outra base, por isso
+só tem lista / detalhe
 
 ✅ **Dashboard** - Visão geral do sistema
 ✅ **Assuntos** - CRUD completo
