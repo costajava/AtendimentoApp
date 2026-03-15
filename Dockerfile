@@ -2,8 +2,6 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package.json ./
-# Se existir package-lock.json, descomente a linha abaixo
-# COPY package-lock.json ./
 RUN npm install
 COPY . .
 RUN npm run build -- --configuration production
