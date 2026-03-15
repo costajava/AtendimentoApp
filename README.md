@@ -47,13 +47,6 @@ export const environment = {
 ## Desenvolvimento
 
 Execute o servidor de desenvolvimento:
-
-```bash
-npm start
-```
-
-Ou:
-
 ```bash
 ng serve
 ```
@@ -77,8 +70,8 @@ Os arquivos de build serão armazenados no diretório `dist/`.
 ✅ **Dashboard** - Visão geral do sistema
 ✅ **Assuntos** - CRUD completo
 ✅ **Atendimentos** - CRUD completo com relacionamentos
-✅ **CAs** - CRUD completo com datas e status
-✅ **Clientes** - CRUD completo com status ativo/inativo
+✅ **CAs** - Lista / Detalhes
+✅ **Clientes** - Lista / Detalhes
 ✅ **Módulos** - CRUD completo
 ✅ **Sugestões** - CRUD completo com relacionamento de cliente
 ✅ **Tipos de Atendimento** - CRUD completo
@@ -95,112 +88,4 @@ Os arquivos de build serão armazenados no diretório `dist/`.
 - ✅ Componentes standalone
 - ✅ Integração completa com API REST
 
-## Estrutura do Projeto
 
-```
-src/
-├── app/
-│   ├── components/
-│   │   ├── assunto/
-│   │   │   ├── assunto-list/
-│   │   │   └── assunto-form/
-│   │   ├── atendimento/
-│   │   │   ├── atendimento-list/
-│   │   │   └── atendimento-form/
-│   │   ├── ca/
-│   │   ├── cliente/
-│   │   ├── dashboard/
-│   │   ├── modulo/
-│   │   ├── sugestao/
-│   │   ├── tipo-atendimento/
-│   │   ├── usuario/
-│   │   └── shared/
-│   │       └── confirm-dialog/
-│   ├── models/
-│   │   ├── assunto.model.ts
-│   │   ├── atendimento.model.ts
-│   │   ├── ca.model.ts
-│   │   ├── cliente.model.ts
-│   │   ├── modulo.model.ts
-│   │   ├── page-request.model.ts
-│   │   ├── sugestao.model.ts
-│   │   ├── tipo-atendimento.model.ts
-│   │   └── usuario.model.ts
-│   ├── services/
-│   │   ├── api.service.ts
-│   │   ├── assunto.service.ts
-│   │   ├── atendimento.service.ts
-│   │   ├── ca.service.ts
-│   │   ├── cliente.service.ts
-│   │   ├── modulo.service.ts
-│   │   ├── sugestao.service.ts
-│   │   ├── tipo-atendimento.service.ts
-│   │   └── usuario.service.ts
-│   ├── app.component.ts
-│   ├── app.config.ts
-│   └── app.routes.ts
-├── environments/
-│   ├── environment.ts
-│   └── environment.prod.ts
-├── index.html
-├── main.ts
-└── styles.scss
-```
-
-## Rotas da Aplicação
-
-- `/` - Redireciona para Dashboard
-- `/dashboard` - Página inicial
-- `/assuntos` - Lista de assuntos
-- `/assuntos/novo` - Novo assunto
-- `/assuntos/:id` - Editar assunto
-- `/atendimentos` - Lista de atendimentos
-- `/atendimentos/novo` - Novo atendimento
-- `/atendimentos/:id` - Editar atendimento
-- `/cas` - Lista de CAs
-- `/clientes` - Lista de clientes
-- `/modulos` - Lista de módulos
-- `/sugestoes` - Lista de sugestões
-- `/tipos-atendimento` - Lista de tipos de atendimento
-- `/usuarios` - Lista de usuários
-
-## Integração com API
-
-Todos os serviços estendem `ApiService` que fornece métodos HTTP padronizados:
-
-- `get<T>(endpoint, params?)` - GET request
-- `post<T>(endpoint, body)` - POST request
-- `put<T>(endpoint, body)` - PUT request
-- `delete<T>(endpoint)` - DELETE request
-
-## Troubleshooting
-
-### Erro de CORS
-Configure CORS na API .NET para aceitar requisições do Angular:
-
-```csharp
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngular", policy =>
-    {
-        policy.WithOrigins("http://localhost:4200")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
-
-app.UseCors("AllowAngular");
-```
-
-### Erro de SSL
-Para desenvolvimento, você pode desabilitar a verificação SSL ou usar HTTP.
-
-## Próximos Passos
-
-- [ ] Implementar autenticação JWT
-- [ ] Adicionar paginação nas listas
-- [ ] Implementar filtros avançados
-- [ ] Adicionar gráficos no dashboard
-- [ ] Implementar exportação de dados (Excel/PDF)
-- [ ] Adicionar testes unitários
-- [ ] Implementar PWA
