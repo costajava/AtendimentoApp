@@ -1,0 +1,255 @@
+<div class="container-custom">
+  <h1 class="text-3xl font-bold mb-6">{{ isEditMode ? 'Editar' : 'Novo' }} Atendimento</h1>
+
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+        <!-- Mensagens de erro -->
+        <div *ngIf="errorMessages.length > 0" class="error-summary">
+          <mat-card class="mat-elevation-z2 error-card">
+            <mat-card-header>
+              <mat-card-title>Erros de validação</mat-card-title>
+              <button mat-icon-button (click)="$event.stopPropagation(); clearErrorMessages($event)" class="close-button" aria-label="Fechar">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-card-header>
+            <mat-card-content>
+              <ul>
+                <li *ngFor="let error of errorMessages">{{error}}</li>
+              </ul>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        
+        <!-- Seção de duas colunas -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Coluna Esquerda -->
+          <div class="space-y-4">
+            <div class="space-y-4">
+              <!-- CA com busca por código -->
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <!-- Campo para digitar código da CA (30% width) -->
+                <mat-form-field appearance="fill" class="md:col-span-3">
+                  <mat-label>Cód.CA</mat-label>
+                  <input #primeiroCampo matInput type="number" [(ngModel)]="caCodigoInput" 
+                         [ngModelOptions]="{standalone: true}"
+                         (ngModelChange)="onCaCodigoChange($event)"
+                         placeholder="código">
+                  <mat-hint *ngIf="caCodigoInput && !isCaCodigoValido()" class="text-red-500">
+                    Código não encontrado
+                  </mat-hint>
+                </mat-form-field>
+
+                <!-- Select de CA (70% width) -->
+                <mat-form-field appearance="fill" class="md:col-span-9">
+                  <mat-label>CA</mat-label>
+                  <mat-select formControlName="caId" required>
+                    <mat-option [value]="null">Nenhum</mat-option>
+                    <mat-option *ngFor="let ca of cas" [value]="ca.id">
+                      {{ ca.id }} - {{ ca.nome }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.get('caId')?.hasError('required')">
+                    CA é obrigatório
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- CA Compartilhada (somente display) -->
+              <mat-form-field appearance="fill">
+                <mat-label>CA Compartilhada</mat-label>
+                <mat-select formControlName="caCompartilhadaId" [disabled]="true">
+                  <mat-option [value]="null">Nenhuma</mat-option>
+                  <mat-option *ngFor="let ca of cas" [value]="ca.id">
+                    {{ ca.id }} - {{ ca.nome }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Cliente com busca por código -->
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <!-- Campo para digitar código do Cliente (30% width) -->
+                <mat-form-field appearance="fill" class="md:col-span-3">
+                  <mat-label>Cód.Cliente</mat-label>
+                  <input matInput type="number" [(ngModel)]="clienteCodigoInput" 
+                         [ngModelOptions]="{standalone: true}"
+                         (ngModelChange)="onClienteCodigoChange($event)"
+                         placeholder="código">
+                  <mat-hint *ngIf="clienteCodigoInput && !isClienteCodigoValido()" class="text-red-500">
+                    Código não encontrado
+                  </mat-hint>
+                </mat-form-field>
+
+                <!-- Select de Cliente (70% width) -->
+                <mat-form-field appearance="fill" class="md:col-span-9">
+                  <mat-label>Cliente</mat-label>
+                  <mat-select formControlName="clienteId">
+                    <mat-option [value]="null">Nenhum</mat-option>
+                    <mat-option *ngFor="let cliente of clientesFiltrados" [value]="cliente.id">
+                      {{ cliente.id }} - {{ cliente.nome }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Contato -->
+              <mat-form-field appearance="fill">
+                <mat-label>Contato</mat-label>
+                <input matInput formControlName="contato">
+                <mat-error *ngIf="form.get('contato')?.hasError('required')">
+                  Contato é obrigatório
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Tipo de Atendimento -->
+              <mat-form-field appearance="fill">
+                <mat-label>Tipo de Atendimento</mat-label>
+                <mat-select formControlName="tipoAtendimentoId">
+                  <mat-option *ngFor="let tipo of tiposAtendimento" [value]="tipo.id">
+                    {{ tipo.descricao }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('tipoAtendimentoId')?.hasError('required')">
+                  Tipo de Atendimento é obrigatório
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Data e Horário do Atendimento -->
+              <div class="grid grid-cols-1 md:grid-cols-10 gap-4">
+                <!-- Data do Atendimento (60% width) -->
+                <mat-form-field appearance="fill" class="md:col-span-6">
+                  <mat-label>Data do Atendimento</mat-label>
+                  <input #dataAtendimentoInput matInput [matDatepicker]="picker" formControlName="dataAtendimento" 
+                         appDateMask 
+                         placeholder="dd/mm/yyyy"
+                         maxlength="10"
+                         autocomplete="off">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-error *ngIf="form.get('dataAtendimento')?.hasError('required')">
+                    Data é obrigatória
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- Hora Início (20% width) -->
+                <mat-form-field appearance="fill" class="md:col-span-2">
+                  <mat-label>Hora Início</mat-label>
+                  <input matInput type="time" formControlName="horaInicio" (focus)="onHoraInicioFocus()">
+                  <mat-error *ngIf="form.get('horaInicio')?.hasError('required')">
+                    Hora início obrigatório
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- Hora Fim (20% width) -->
+                <mat-form-field appearance="fill" class="md:col-span-2">
+                  <mat-label>Hora Fim</mat-label>
+                  <input matInput type="time" formControlName="horaFim">
+                </mat-form-field>
+              </div>
+
+              <!-- Módulo -->
+              <mat-form-field appearance="fill">
+                <mat-label>Módulo do Atendimento</mat-label>
+                <mat-select formControlName="moduloId">
+                  <mat-option *ngFor="let modulo of modulos" [value]="modulo.id">
+                    {{ modulo.nome }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('moduloId')?.hasError('required')">
+                  Módulo é obrigatório
+                </mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+          <!-- Coluna Direita -->
+          <div class="space-y-4">
+            <div class="space-y-4">
+              <!-- Assunto -->
+              <mat-form-field appearance="fill">
+                <mat-label>Assunto do Atendimento</mat-label>
+                <mat-select formControlName="assuntoId">
+                  <mat-option *ngFor="let assunto of assuntos" [value]="assunto.id">
+                    {{ assunto.tipoAssunto }}
+                  </mat-option>
+                </mat-select>
+                <button
+                  mat-icon-button
+                  matSuffix
+                  type="button"
+                  aria-label="Novo Assunto"
+                  (mousedown)="$event.stopPropagation()"
+                  (click)="$event.stopPropagation(); openAssuntoDialog()"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+                <mat-error *ngIf="form.get('assuntoId')?.hasError('required')">
+                  Assunto é obrigatório
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Status do Atendimento -->
+              <mat-form-field appearance="fill">
+                <mat-label>Atendimento já foi resolvido?</mat-label>
+                <mat-select formControlName="atendimentoConcluido">
+                  <mat-option [value]="0">Não Concluído</mat-option>
+                  <mat-option [value]="1">Concluído</mat-option>
+                  <mat-option [value]="2">Parcialmente</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('atendimentoConcluido')?.hasError('required')">
+                  Status é obrigatório
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Cobrar Cliente -->
+              <div class="flex items-center">
+                <mat-slide-toggle formControlName="cobrarCliente" class="mb-2">
+                  Sugerir cobrança?
+                </mat-slide-toggle>
+              </div>
+
+              <!-- Sugestão de Atendimento-->
+              <mat-form-field appearance="fill">
+                <mat-label>Sugestão de atendimento</mat-label>
+                <mat-select formControlName="sugestaoId">
+                  <mat-option *ngFor="let sugestao of sugestoes" [value]="sugestao.id">
+                    {{ sugestao.descricao }}
+                  </mat-option>
+                </mat-select>
+                <button
+                  mat-icon-button
+                  matSuffix
+                  type="button"
+                  aria-label="Nova Sugestão"
+                  (mousedown)="$event.stopPropagation()"
+                  (click)="$event.stopPropagation(); openSugestaoDialog()"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+                <mat-error *ngIf="form.get('sugestaoId')?.hasError('required')">
+                  Sugestão de atendimento é obrigatória
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Observações -->
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Digite as observações do atendimento</mat-label>
+                <textarea matInput formControlName="observacoes" rows="5" max-height="130px" placeholder="Informações adicionais sobre o atendimento"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button mat-raised-button type="button" (click)="onCancel()">
+            Cancelar
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid || loading">
+            {{ isEditMode ? 'Atualizar' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,32 @@
+<div class="container-custom">
+  <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <mat-card *ngFor="let card of cards" class="cursor-pointer hover:shadow-lg transition-shadow">
+      <a [routerLink]="card.link" class="no-underline text-inherit">
+        <mat-card-content class="flex items-center p-6">
+          <div [class]="card.color + ' text-white p-4 rounded-full mr-4'">
+            <mat-icon class="text-4xl">{{ card.icon }}</mat-icon>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold mb-1">{{ card.count }}</h2>
+            <p class="text-gray-600">{{ card.title }}</p>
+          </div>
+        </mat-card-content>
+      </a>
+    </mat-card>
+  </div>
+
+  <div class="mt-8">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Bem-vindo ao Sistema de Atendimento</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="mt-4">
+        <p class="text-gray-700">
+          Utilize o menu lateral para navegar entre as diferentes funcionalidades do sistema.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

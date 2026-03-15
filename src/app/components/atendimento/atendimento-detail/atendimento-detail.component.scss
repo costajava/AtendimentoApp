@@ -1,0 +1,30 @@
+.detalhe-card {
+  margin: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px 16px;
+}
+
+.campo {
+  grid-column: span 6;
+}
+
+.campo-12 {
+  grid-column: span 12;
+}
+
+.rotulo {
+  font-weight: 600;
+  color: #555;
+}
+
+.valor {
+  padding: 8px 12px;
+  background: #f7f7f7;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+

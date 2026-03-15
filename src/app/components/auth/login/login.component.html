@@ -1,0 +1,73 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Login - Atendimento</mat-card-title>
+      <mat-card-subtitle>Entre com suas credenciais</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Bloco de erros -->
+      <div *ngIf="errorMessages.length > 0" class="error-summary">
+        <mat-card class="mat-elevation-z2 error-card">
+          <mat-card-header>
+            <mat-card-title>Erro ao fazer login</mat-card-title>
+            <button mat-icon-button (click)="$event.stopPropagation(); clearErrorMessages()" class="close-button" aria-label="Fechar">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-card-content>
+            <ul>
+              <li *ngFor="let error of errorMessages">{{error}}</li>
+            </ul>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-field">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Usuário</mat-label>
+            <input #campoUsuario matInput formControlName="nome" required autocomplete="username">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="loginForm.get('nome')?.hasError('required')">
+              Nome de usuário é obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-field">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Senha</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="senha" required autocomplete="current-password">
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.get('senha')?.hasError('required')">
+              Senha é obrigatória
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <button mat-flat-button color="primary" type="submit" [disabled]="loginForm.invalid || loading" class="w-full h-12 text-lg">
+            <mat-spinner diameter="24" *ngIf="loading" class="mr-2 inline-block"></mat-spinner>
+            <span *ngIf="!loading">Entrar</span>
+            <span *ngIf="loading">Entrando...</span>
+          </button>
+
+          <div class="flex justify-center items-center mt-2">
+            <span class="text-sm mr-1">Esqueceu sua senha?</span>
+            <a class="text-sm forgot-link cursor-pointer" (click)="abrirEsqueciSenha()">
+              Clique aqui
+            </a>
+          </div>
+        </div>
+
+        <div class="register-link">
+          Não tem uma conta? <a routerLink="/registrar">Registre-se</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

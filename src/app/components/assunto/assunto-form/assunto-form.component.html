@@ -1,0 +1,57 @@
+<div class="container-custom">
+  <h1 class="text-3xl font-bold mb-6">{{ isEditMode ? 'Editar' : 'Novo' }} Assunto</h1>
+
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <!-- Mensagens de erro -->
+        <div *ngIf="errorMessages.length > 0" class="error-summary">
+          <mat-card class="mat-elevation-z2 error-card">
+            <mat-card-header>
+              <mat-card-title>Erros de validação</mat-card-title>
+              <button mat-icon-button (click)="$event.stopPropagation(); clearErrorMessages($event)" class="close-button" aria-label="Fechar">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-card-header>
+            <mat-card-content>
+              <ul>
+                <li *ngFor="let error of errorMessages">{{error}}</li>
+              </ul>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <mat-form-field appearance="fill">
+          <mat-label>Tipo de Assunto</mat-label>
+          <input matInput #primeiroCampo formControlName="tipoAssunto" placeholder="Digite o tipo de assunto">
+          <mat-error *ngIf="form.get('tipoAssunto')?.hasError('required')">
+            Tipo de Assunto é obrigatório
+          </mat-error>
+          <mat-error *ngIf="form.get('tipoAssunto')?.hasError('maxlength')">
+            Tipo de Assunto deve ter no máximo 100 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Módulo</mat-label>
+          <mat-select formControlName="moduloId">
+            <mat-option *ngFor="let modulo of modulos" [value]="modulo.id">
+              {{ modulo.nome }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('moduloId')?.hasError('required')">
+            Módulo é obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <div class="action-buttons">
+          <button mat-raised-button type="button" (click)="onCancel()">
+            Cancelar
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid || loading">
+            {{ isEditMode ? 'Atualizar' : 'Salvar' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

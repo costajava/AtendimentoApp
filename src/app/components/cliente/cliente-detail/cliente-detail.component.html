@@ -1,0 +1,45 @@
+<mat-card class="detalhe-card" *ngIf="cliente as c; else carregando">
+  <mat-card-header>
+    <mat-card-title>Detalhes do Cliente</mat-card-title>
+    <mat-card-subtitle>ID: {{ c.id }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="grid">
+      <div class="campo">
+        <div class="rotulo">Nome</div>
+        <div class="valor">{{ c.nome || '-' }}</div>
+      </div>
+      <div class="campo">
+        <div class="rotulo">UF</div>
+        <div class="valor">{{ c.uf || '-' }}</div>
+      </div>
+      <div class="campo">
+        <div class="rotulo">Cidade</div>
+        <div class="valor">{{ c.cidade || '-' }}</div>
+      </div>
+      <div class="campo">
+        <div class="rotulo">CA</div>
+        <div class="valor">{{ nomeCa(c.caId) }}</div>
+      </div>
+      <div class="campo">
+        <div class="rotulo">CA Compartilhada</div>
+        <div class="valor">{{ nomeCa(c.caCompartilhadaId) }}</div>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-stroked-button color="primary" (click)="voltar()">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<ng-template #carregando>
+  <mat-card class="detalhe-card">
+    <mat-card-content>
+      Carregando cliente...
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+

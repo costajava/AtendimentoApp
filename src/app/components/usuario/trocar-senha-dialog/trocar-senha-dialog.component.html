@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Trocar Senha</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4 min-w-[300px] pt-4">
+    <mat-form-field appearance="fill">
+      <mat-label>Senha Atual</mat-label>
+      <input matInput [type]="hideSenhaAtual ? 'password' : 'text'" formControlName="senhaAtual">
+      <button mat-icon-button matSuffix (click)="hideSenhaAtual = !hideSenhaAtual" type="button">
+        <mat-icon>{{hideSenhaAtual ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.get('senhaAtual')?.hasError('required')">
+        Senha atual é obrigatória
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Nova Senha</mat-label>
+      <input matInput [type]="hideNovaSenha ? 'password' : 'text'" formControlName="novaSenha">
+      <button mat-icon-button matSuffix (click)="hideNovaSenha = !hideNovaSenha" type="button">
+        <mat-icon>{{hideNovaSenha ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.get('novaSenha')?.hasError('required')">
+        Nova senha é obrigatória
+      </mat-error>
+      <mat-error *ngIf="form.get('novaSenha')?.hasError('minlength')">
+        A senha deve ter no mínimo 6 caracteres
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Confirmar Nova Senha</mat-label>
+      <input matInput [type]="hideConfirmaSenha ? 'password' : 'text'" formControlName="confirmaSenha">
+      <button mat-icon-button matSuffix (click)="hideConfirmaSenha = !hideConfirmaSenha" type="button">
+        <mat-icon>{{hideConfirmaSenha ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.get('confirmaSenha')?.hasError('required')">
+        Confirmação de senha é obrigatória
+      </mat-error>
+      <mat-error *ngIf="form.get('confirmaSenha')?.hasError('mismatch')">
+        As senhas não conferem
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="loading">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="form.invalid || loading">
+    <mat-spinner diameter="20" *ngIf="loading" class="mr-2 inline-block"></mat-spinner>
+    <span *ngIf="!loading">Alterar Senha</span>
+    <span *ngIf="loading">Alterando...</span>
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.container-custom {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+/* Estilos para mensagens de erro */
+.error-summary {
+  margin-bottom: 1.5rem;
+  animation: fadeOut 8s forwards;
+  opacity: 1;
+  
+  .error-card {
+    background-color: #fff8f8;
+    border-left: 4px solid #f44336;
+    
+    mat-card-header {
+      color: #d32f2f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-right: 8px;
+      
+      .mat-mdc-card-header-text {
+        margin: 0;
+      }
+      
+      .close-button {
+        margin: 0;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        
+        .mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+        }
+      }
+    }
+    
+    mat-card-content {
+      padding-top: 0.5rem;
+      
+      ul {
+        margin: 0;
+        padding-left: 1.5rem;
+        
+        li {
+          color: #d32f2f;
+          margin: 0.5rem 0;
+          font-size: 0.875rem;
+          line-height: 1.25rem;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+.action-buttons {
+  @apply flex gap-2 justify-end mt-4;
+}
+
+.table-container {
+  @apply overflow-x-auto shadow-md rounded-lg;
+}
+
+.page-header {
+  @apply flex justify-between items-center mb-6;
+}
+
+.card-custom {
+  @apply bg-white rounded-lg shadow-md p-6;
+}
+
+/* Custom Snackbars */
+.success-snackbar {
+  --mdc-snackbar-container-color: #ffffff;
+  --mdc-snackbar-supporting-text-color: #4caf50;
+  --mat-snack-bar-button-color: #388e3c;
+
+  .mdc-snackbar__surface {
+    background-color: #ffffff !important;
+  }
+  
+  .mdc-snackbar__label {
+    color: #4caf50 !important;
+  }
+  
+  .mat-mdc-snack-bar-action {
+    color: #388e3c !important;
+  }
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: #ffffff;
+  --mdc-snackbar-supporting-text-color: #f44336;
+  --mat-snack-bar-button-color: #d32f2f;
+
+  .mdc-snackbar__surface {
+    background-color: #ffffff !important;
+  }
+  
+  .mdc-snackbar__label {
+    color: #f44336 !important;
+  }
+  
+  .mat-mdc-snack-bar-action {
+    color: #d32f2f !important;
+  }
+}

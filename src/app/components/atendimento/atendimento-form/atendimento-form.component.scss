@@ -1,0 +1,7 @@
+// Estilos específicos do componente atendimento-form
+/* No arquivo CSS/SCSS do seu componente (.component.css ou .component.scss) */
+.w-full textarea {
+  max-height: 200px !important; 
+  min-height: 130px !important; 
+  resize: vertical; 
+}

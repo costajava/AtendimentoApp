@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Nova Sugestão de Atendimento</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4">
+    <mat-form-field appearance="fill">
+      <mat-label>Descrição da Sugestão</mat-label>
+      <input matInput formControlName="descricao" type="text" maxlength="50" placeholder="Descreva a sugestão" />
+      <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+        Descrição é obrigatória
+      </mat-error>
+      <mat-error *ngIf="form.get('descricao')?.hasError('maxlength')">
+        Descrição deve ter no máximo 50 caracteres
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || loading" (click)="onSubmit()">Salvar</button>
+</div>

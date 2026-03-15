@@ -1,0 +1,72 @@
+<div class="container-custom">
+  <div class="page-header">
+    <h1 class="text-3xl font-bold">CAs</h1>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="filter-section mb-4">
+        <mat-form-field appearance="fill" class="w-full md:w-96">
+          <mat-label>Filtrar por nome</mat-label>
+          <input matInput #campoFiltro [(ngModel)]="filtroNome" (keyup.enter)="aplicarFiltro()" placeholder="Digite o nome do CA">
+          <button mat-icon-button matSuffix (click)="aplicarFiltro()" *ngIf="filtroNome">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button mat-icon-button matSuffix (click)="limparFiltro()" *ngIf="filtroNome">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div class="table-container">
+        <table mat-table [dataSource]="cas" class="w-full">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let ca">{{ ca.id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef>Nome</th>
+            <td mat-cell *matCellDef="let ca">{{ ca.nome }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="cidade">
+            <th mat-header-cell *matHeaderCellDef>Cidade</th>
+            <td mat-cell *matCellDef="let ca">{{ ca.cidade }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="uf">
+            <th mat-header-cell *matHeaderCellDef>UF</th>
+            <td mat-cell *matCellDef="let ca">{{ ca.uf }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Ações</th>
+            <td mat-cell *matCellDef="let ca" class="text-right">
+              <button mat-icon-button color="primary" [routerLink]="['/cas', ca.id, 'detalhe']">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <div *ngIf="cas.length === 0 && !loading" class="text-center py-8 text-gray-500">
+        Nenhum CA cadastrado
+      </div>
+
+      <mat-paginator 
+        *ngIf="totalCount > 0"
+        [length]="totalCount"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 25, 50, 100]"
+        [pageIndex]="pageIndex"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

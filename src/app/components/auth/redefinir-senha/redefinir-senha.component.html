@@ -1,0 +1,90 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+  <mat-card class="w-full max-w-3xl card-custom">
+    <mat-card-header class="justify-center mb-6">
+      <mat-card-title class="text-2xl font-bold text-gray-800">Controle de Atendimento - Recuperação de Senha</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <mat-stepper [linear]="true" #stepper orientation="horizontal">
+        
+        <!-- Passo 1: Email -->
+        <mat-step [stepControl]="emailForm" label="Identificação">
+          <form [formGroup]="emailForm" class="flex flex-col gap-4 mt-6">
+            <p class="text-gray-600 mb-4 text-center">Informe seu e-mail cadastrado para receber o código de segurança.</p>
+            
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>E-mail</mat-label>
+              <input matInput formControlName="email" placeholder="seu@email.com" required>
+              <mat-error *ngIf="emailForm.get('email')?.hasError('required')">E-mail é obrigatório</mat-error>
+              <mat-error *ngIf="emailForm.get('email')?.hasError('email')">E-mail inválido</mat-error>
+            </mat-form-field>
+            
+            <div class="flex justify-end pt-4">
+              <button mat-button routerLink="/login" class="mr-auto" type="button">Cancelar</button>
+              <button mat-flat-button color="primary" (click)="solicitarCodigo(stepper)" [disabled]="emailForm.invalid || loading">
+                <mat-spinner diameter="20" *ngIf="loading" class="mr-2 inline-block"></mat-spinner>
+                Enviar Código
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- Passo 2: Código -->
+        <mat-step [stepControl]="codigoForm" label="Validação">
+          <form [formGroup]="codigoForm" class="flex flex-col gap-4 mt-6">
+            <p class="text-gray-600 mb-4 text-center">Informe o código de segurança enviado para <strong>{{ email }}</strong>.</p>
+            
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>Código de Segurança</mat-label>
+              <input matInput formControlName="codigo" required placeholder="Digite o código recebido">
+              <mat-error *ngIf="codigoForm.get('codigo')?.hasError('required')">Código é obrigatório</mat-error>
+            </mat-form-field>
+
+            <div class="flex justify-between pt-4">
+              <button mat-button matStepperPrevious type="button">Voltar</button>
+              <button mat-flat-button color="primary" (click)="validarCodigo(stepper)" [disabled]="codigoForm.invalid || loading">
+                <mat-spinner diameter="20" *ngIf="loading" class="mr-2 inline-block"></mat-spinner>
+                Validar Código
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- Passo 3: Nova Senha -->
+        <mat-step [stepControl]="senhaForm" label="Nova Senha">
+          <form [formGroup]="senhaForm" class="flex flex-col gap-4 mt-6">
+            <p class="text-gray-600 mb-4 text-center">Crie sua nova senha de acesso.</p>
+            
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>Nova Senha</mat-label>
+              <input matInput [type]="hideSenha ? 'password' : 'text'" formControlName="senha">
+              <button mat-icon-button matSuffix (click)="hideSenha = !hideSenha" type="button">
+                <mat-icon>{{hideSenha ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="senhaForm.get('senha')?.hasError('required')">Senha obrigatória</mat-error>
+              <mat-error *ngIf="senhaForm.get('senha')?.hasError('minlength')">Mínimo 6 caracteres</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>Confirmar Nova Senha</mat-label>
+              <input matInput [type]="hideConfirmaSenha ? 'password' : 'text'" formControlName="confirmaSenha">
+              <button mat-icon-button matSuffix (click)="hideConfirmaSenha = !hideConfirmaSenha" type="button">
+                <mat-icon>{{hideConfirmaSenha ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="senhaForm.get('confirmaSenha')?.hasError('required')">Confirmação obrigatória</mat-error>
+              <mat-error *ngIf="senhaForm.get('confirmaSenha')?.hasError('mismatch')">Senhas não conferem</mat-error>
+            </mat-form-field>
+
+            <div class="flex justify-between pt-4">
+              <button mat-button matStepperPrevious type="button">Voltar</button>
+              <button mat-flat-button color="primary" (click)="redefinirSenha()" [disabled]="senhaForm.invalid || loading">
+                <mat-spinner diameter="20" *ngIf="loading" class="mr-2 inline-block"></mat-spinner>
+                Redefinir Senha
+              </button>
+            </div>
+          </form>
+        </mat-step>
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>

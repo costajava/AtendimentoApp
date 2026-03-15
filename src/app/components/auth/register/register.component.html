@@ -1,0 +1,127 @@
+<div class="register-container">
+  <mat-card class="register-card">
+    <mat-card-header>
+      <mat-card-title>Registrar</mat-card-title>
+      <mat-card-subtitle>Crie sua conta</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Bloco de erros -->
+      <div *ngIf="errorMessages.length > 0" class="error-summary">
+        <mat-card class="mat-elevation-z2 error-card">
+          <mat-card-header>
+            <mat-card-title>Erros de validação</mat-card-title>
+            <button mat-icon-button (click)="$event.stopPropagation(); clearErrorMessages($event)" class="close-button" aria-label="Fechar">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-card-content>
+            <ul>
+              <li *ngFor="let error of errorMessages">{{error}}</li>
+            </ul>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="form-field">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="nome" required>
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="registerForm.get('nome')?.hasError('required')">
+              Nome é obrigatório
+            </mat-error>
+            <mat-error *ngIf="registerForm.get('nome')?.hasError('minlength')">
+              Nome deve ter no mínimo 3 caracteres
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>E-mail</mat-label>
+            <input matInput type="email" formControlName="email" required>
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
+              E-mail é obrigatório
+            </mat-error>
+            <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
+              E-mail inválido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Perfil</mat-label>
+            <mat-select formControlName="perfil" required>
+              <mat-option *ngFor="let perfil of perfis" [value]="perfil.value">
+                {{ perfil.label }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>badge</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field" *ngIf="modulos.length > 0">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Módulo (Opcional)</mat-label>
+            <mat-select formControlName="moduloId">
+              <mat-option [value]="null">Nenhum</mat-option>
+              <mat-option *ngFor="let modulo of modulos" [value]="modulo.id">
+                {{ modulo.nome }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>apps</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Senha</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="senha" required>
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="registerForm.get('senha')?.hasError('required')">
+              Senha é obrigatória
+            </mat-error>
+            <mat-error *ngIf="registerForm.get('senha')?.hasError('minlength')">
+              A senha deve ter no mínimo 6 caracteres
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Confirmar Senha</mat-label>
+            <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmaSenha" required>
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button">
+              <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="registerForm.get('confirmaSenha')?.hasError('required')">
+              Confirmação de senha é obrigatória
+            </mat-error>
+            <mat-error *ngIf="registerForm.get('confirmaSenha')?.hasError('mismatch')">
+              As senhas não conferem
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading || registerForm.invalid" class="full-width">
+            <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"></mat-spinner>
+            <span *ngIf="!loading">Registrar</span>
+          </button>
+        </div>
+
+        <div class="login-link">
+          Já tem uma conta? <a routerLink="/login">Faça login</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

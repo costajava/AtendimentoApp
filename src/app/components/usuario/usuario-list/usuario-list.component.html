@@ -1,0 +1,74 @@
+<div class="container-custom">
+  <div class="page-header">
+    <h1 class="text-3xl font-bold">Usuários</h1>
+    <button mat-raised-button color="primary" routerLink="/usuarios/novo">
+      <mat-icon>add</mat-icon>
+      Novo Usuário
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="filter-section mb-4">
+        <mat-form-field appearance="fill" class="w-full md:w-96">
+          <mat-label>Filtrar por nome</mat-label>
+          <input matInput #campoFiltro [(ngModel)]="filtroNome" (keyup.enter)="aplicarFiltro()" placeholder="Digite o nome do usuário">
+          <button mat-icon-button matSuffix (click)="aplicarFiltro()" *ngIf="filtroNome">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button mat-icon-button matSuffix (click)="limparFiltro()" *ngIf="filtroNome">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div class="table-container">
+        <table mat-table [dataSource]="usuarios" class="w-full">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let usuario">{{ usuario.id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef>Nome</th>
+            <td mat-cell *matCellDef="let usuario">{{ usuario.nome }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let usuario">{{ usuario.email }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Ações</th>
+            <td mat-cell *matCellDef="let usuario" class="text-right">
+              <button mat-icon-button color="primary" [routerLink]="['/usuarios', usuario.id]">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteUsuario(usuario.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <div *ngIf="usuarios.length === 0 && !loading" class="text-center py-8 text-gray-500">
+        Nenhum usuário cadastrado
+      </div>
+
+      <mat-paginator 
+        *ngIf="totalCount > 0"
+        [length]="totalCount"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 25, 50, 100]"
+        [pageIndex]="pageIndex"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Novo Assunto</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col gap-4">
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo de Assunto</mat-label>
+      <input matInput formControlName="tipoAssunto" placeholder="Digite o tipo de assunto">
+      <mat-error *ngIf="form.get('tipoAssunto')?.hasError('required')">
+        Tipo de Assunto é obrigatório
+      </mat-error>
+      <mat-error *ngIf="form.get('tipoAssunto')?.hasError('maxlength')">
+        Tipo de Assunto deve ter no máximo 100 caracteres
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Módulo</mat-label>
+      <mat-select formControlName="moduloId">
+        <mat-option *ngFor="let modulo of modulos" [value]="modulo.id">
+          {{ modulo.nome }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('moduloId')?.hasError('required')">
+        Módulo é obrigatório
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="!form.valid || loading" (click)="onSubmit()">
+    Salvar
+  </button>
+</div>
