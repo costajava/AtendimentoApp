@@ -1,6 +1,6 @@
-# AtendimentoApp - Sistema de Atendimento - FrontEnd
+# AtendimentoApp - FrontEnd
 
-Sistema de gerenciamento de atendimentos de Clientes
+## Sistema de Atendimento e Suporte a Clientes
 
 ## Tecnologias
 
